@@ -1,5 +1,5 @@
 import faunadb from "faunadb";
-const chalk = require("chalk");
+// const chalk = require("chalk");
 // let key = checkForFaunaKey();
 let key = "fnADwAb8WMACBdmk7a-pZlu3uheEn7p5hfQZn93h";
 
