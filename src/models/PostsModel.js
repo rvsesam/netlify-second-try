@@ -21,10 +21,19 @@ export function addPost(postData, journalID) {
     .catch(error => error);
 }
 
-/**
- *
- * @param {string} journalID
- */
+export function addNote(noteData) {
+  return client
+    .query(
+      q.Create(q.Collection("notes"), {
+        data: {
+          ...noteData
+        }
+      })
+    )
+    .then(resp => resp)
+    .catch(error => error);
+}
+
 export function getPosts(journalID) {
   // Get the Current Journal reference object
   // TODO: Wonder if we could just store the current journal ID object into a vuex,
@@ -57,27 +66,18 @@ export function getAllNotes() {
     .catch(err => err);
 }
 
-/**
- *
- * @param {object} refID - fauna ref object
- */
-export function deletePost(refID) {
+export function deleteNote(refID) {
   return client
     .query(q.Delete(refID))
     .then(resp => resp)
     .catch(err => err);
 }
 
-/**
- *
- * @param {object} postRefID - faunaDb Post collection reference ID
- * @param {string} newPost - new post for journal
- */
-export function updatePost(postRefID, newPostData) {
+export function updateNote(noteRefID, newNoteData) {
   return client
     .query(
-      q.Update(q.Ref(q.Collection("posts"), postRefID), {
-        data: newPostData
+      q.Update(q.Ref(q.Collection("notes"), noteRefID), {
+        data: newNoteData
       })
     )
     .then(resp => resp)

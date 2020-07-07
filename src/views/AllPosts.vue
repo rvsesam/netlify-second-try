@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="space">
-      <h1>📝 Your Posts</h1>
+      <h1>📝 Your Notes</h1>
       <div id="create-post-container" class="shadow">
         <form class="new-post">
           <input v-model="post.title" type="text" placeholder="Title" />
@@ -12,9 +12,9 @@
           />
           <input
             type="button"
-            name="see notes"
-            value="see notes"
-            @click="getNotes()"
+            name="create"
+            value="Créer une note"
+            @click="submit()"
           />
         </form>
       </div>
@@ -25,8 +25,8 @@
         v-for="(item, index) in allPosts"
         :key="index"
         :post="{ item, index }"
-        @delete-post="deletePost"
-        @update-post="updatePost"
+        @delete-post="deleteNote"
+        @update-post="updateNote"
       />
     </div>
   </main>
@@ -34,10 +34,10 @@
 
 <script>
 import {
-  addPost,
   getAllNotes,
-  deletePost,
-  updatePost
+  addNote,
+  deleteNote,
+  updateNote
 } from "../models/PostsModel";
 import PostCard from "../components/PostCard.vue";
 
@@ -79,33 +79,30 @@ export default {
     },
 
     submit() {
-      addPost(this.post, this.$route.params.id)
+      addNote(this.post)
         .then(resp => {
-          console.log("post obj", resp);
-          alert("Created a new post");
-          this.allPosts.push(resp);
+          this.allPosts.push(resp);      
+          this.post.title = "";
+          this.post.contents = "";
           if (resp.msg) {
             alert(resp.message);
           }
         })
         .catch(err => {
-          alert("there was a problem adding post");
+          alert("there was a problem adding note");
           console.error(err);
         });
     },
-    /**
-     * @param {object} post - fauna post object
-     */
-    deletePost(post) {
-      deletePost(post.item.ref).then(resp => {
+    
+    deleteNote(post) {
+      deleteNote(post.item.ref).then(resp => {
+        this.getNotes();
         console.log("Deleted post", resp);
       });
     },
-    /**
-     * @param {object} updatedPost - fauna post object with modified data
-     */
-    updatePost({ postRefID, updatedPost }) {
-      updatePost(postRefID, updatedPost)
+    
+    updateNote({ postRefID, updatedPost }) {
+      updateNote(postRefID, updatedPost)
         .then(resp => {
           console.log("Post Updated", resp);
         })
