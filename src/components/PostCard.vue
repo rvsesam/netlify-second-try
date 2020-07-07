@@ -17,13 +17,13 @@
       @click="editMode = true"
       @keyup.enter="emitPostUpdate"
     />
-    <button class="delete rnd-corner-a" @click="deleteJournal">
+    <button v-if="editMode" class="delete rnd-corner-a" @click="deleteJournal">
       🗑️ Delete
     </button>
-    <button class="update rnd-corner-b" @click="editMode = !editMode">
+    <button class="edit rnd-corner-b" @click="editMode = !editMode">
       ✏️ Edit
     </button>
-    <button class="update rnd-corner-b" @click="emitPostUpdate">
+    <button v-if="editMode" class="update rnd-corner-b" @click="emitPostUpdate">
       👍 Update
     </button>
   </div>
@@ -78,7 +78,7 @@ export default {
   grid-template-areas:
     "title  title  title"
     "content content content"
-    "delete . update";
+    "delete edit update";
   .title {
     grid-area: title;
     border-radius: 15px 15px 0px 0px;
@@ -104,6 +104,9 @@ export default {
   .delete {
     grid-area: delete;
     // margin-top: 22px;
+  }
+  .edit {
+    grid-area: edit;
   }
   .update {
     grid-area: update;
